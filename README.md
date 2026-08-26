@@ -1,11 +1,12 @@
-File Operations Project
+# File Operations Project
+
 📌 Project Overview
 
 The File Operations Project is a software application designed to manage and perform common operations on files. It provides functionality to create, read, update, delete, upload, download, rename, and organize files efficiently.
 
 This project can be used as a basic file-management module or integrated into larger applications such as an LMS (Learning Management System), document management system, or web application.
 
-✨ Features
+# ✨ Features
 Create new files
 Read file contents
 Upload files
@@ -18,7 +19,7 @@ Manage files by folders or categories
 File type and size validation
 Secure file access
 Error handling for invalid operations
-🛠️ Technologies Used
+# 🛠️ Technologies Used
 
 The technologies can be changed according to your project implementation.
 
@@ -49,7 +50,7 @@ file-operation-project/
 ├── package-lock.json
 └── README.md
 
-⚙️ Installation
+# ⚙️ Installation
 1. Clone the Repository
 git clone <repository-url>
 
@@ -129,7 +130,7 @@ Deletes a selected file.
 
 DELETE /api/files/:id
 
-🔐 Security
+# 🔐 Security
 
 The project should implement appropriate security measures, including:
 
@@ -141,14 +142,14 @@ Secure file names
 Protection against unauthorized file access
 Validation of uploaded files
 Secure handling of file paths
-🚀 Usage
+# 🚀 Usage
 Start the application.
 Log in if authentication is enabled.
 Open the file-management section.
 Upload a file or select an existing file.
 Perform operations such as view, download, rename, update, or delete.
 Organize files into appropriate folders or categories.
-🧪 Testing
+# 🧪 Testing
 
 Run the test suite using:
 
@@ -157,7 +158,7 @@ npm test
 
 You can also test the REST APIs using tools such as Postman or similar API clients.
 
-🐛 Error Handling
+# 🐛 Error Handling
 
 The application should provide meaningful error messages for situations such as:
 
@@ -168,7 +169,7 @@ Unauthorized access
 Upload failure
 File deletion failure
 Invalid request parameters
-🔮 Future Enhancements
+# 🔮 Future Enhancements
 Cloud storage integration
 Multiple file uploads
 File preview
