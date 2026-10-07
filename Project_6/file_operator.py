@@ -1,140 +1,227 @@
-# PR.6 File Operator
+# PR-6 File Operator
 
 import datetime
+import os
 
-class journal:
+
+class JournalManager:
+
+    FILE_NAME = "journal.txt"
 
     
-    def add(self):
+    # Add a New Entry
+    def add_entry(self):
         try:
-            C = "f.txt"
+            entry = input("Enter your journal entry:\n").strip()
 
-            entry = input("Enter your journal entry:\n")
-            
-            time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S %p")
+            if not entry:
+                print("Journal entry cannot be empty!")
+                return
+
+            time = datetime.datetime.now().strftime("%d-%m-%Y %I:%M:%S %p")
+
             print(time)
 
-            with open(C,"a") as file:
+            with open(self.FILE_NAME, "a") as file:
                 file.write(f"\n[{time}]\n")
                 file.write(entry + "\n")
-            
-            print("\nYour Entery has sucssessfully")
-        
+
+            print("\nYour entry has been successfully added!")
+
+        except PermissionError:
+            print("Permission denied! Cannot write to the file.")
+
         except Exception as e:
-            
-            print("Error ",e)
+            print("Error:", e)
 
 
-    def view(self):
+    # View All Entries
+    def view_entries(self):
 
         try:
-            C = "f.txt"
-            with open(C,"r") as file:
+            with open(self.FILE_NAME, "r") as file:
+                content = file.read()
 
-                Content = file.read()
+                if content.strip():
+                    print("\n===== All Journal Entries =====")
+                    print(content)
 
-                if Content:
-                    print("\n =-=-= All Journal Entries =-=-=")
-                    print(Content)
-                    print("==================================\n")
                 else:
                     print("\nJournal is empty!\n")
 
-        except FileNotFoundError :
-            print(" Your file is not in our Dictenary")
+        except FileNotFoundError:
+            print("Journal file not found.")
+
+        except PermissionError:
+            print("Permission denied! Cannot read the file.")
 
         except Exception as e:
-            print("\nError in reading Entries:",e)
+            print("Error while reading entries:", e)
 
-    def Search(self):
 
-        C = "f.txt"
-        D = input("\nEnter Keyword or Data for Search :")
+    # Search Entry
+    def search_entry(self):
+
+        keyword = input("\nEnter keyword or date for search: ").strip()
+
+        if not keyword:
+            print("Please enter a keyword or date.")
+            return
 
         try:
-            file = open(C,"r")
-            lines = file.readlines()
+            with open(self.FILE_NAME, "r") as file:
+                content = file.read()
+
+            entries = content.split("\n\n")
             found = False
 
-            for line in lines :
-                if D.lower() in line.lower():
-                    print(line)
-                    found = True
-            if not found:
-                print("\nKeyword Don't match")
+            print("\n===== Search Result =====")
 
-            file.close()
+            for entry in entries:
+
+                if keyword.lower() in entry.lower():
+                    print(entry)
+                    found = True
+
+            if not found:
+                print("No matching journal entry found.")
 
         except FileNotFoundError:
-            print("\nFile not Found")
-                
-         
-    def delete(self):
+            print("Journal file not found.")
 
-        try:
-            C = "f.txt"
-
-            B = input("\nYoue finally have to delete your entery (yes / No):\n")
-
-            if B == "yes":
-                
-
-                with open(C,"w") as file:
-                    ent = file.write("Contend Deleted")
-                    print(ent)
-                    print("Conted Deleted Successfully !!")
-
-            elif B == "no":
-                print("your Entry's are safe ")
-            
-
-            else:
-                ("Enter Correct Option from Above")
-                
-
-        except FileNotFoundError :
-            print(" Your file is not in our Dictenary")
+        except PermissionError:
+            print("Permission denied! Cannot read the file.")
 
         except Exception as e:
-            print("Error on this path:",e)
+            print("Error while searching:", e)
 
-# Mainmanu
-my_journal = journal()
+
+    # Delete All Entries
+    def delete_entries(self):
+
+        try:
+            confirmation = input("\nAre you sure you want to delete all entries? (yes/no): ").strip().lower()
+
+            if confirmation == "yes":
+
+                if os.path.exists(self.FILE_NAME):
+
+                    os.remove(self.FILE_NAME)
+
+                    print("All journal entries deleted successfully!")
+
+                else:
+                    print("Journal file does not exist.")
+
+            elif confirmation == "no":
+                print("Your journal entries are safe.")
+
+            else:
+                print("Please enter only 'yes' or 'no'.")
+
+        except FileNotFoundError:
+            print("Journal file not found.")
+
+        except PermissionError:
+            print("Permission denied! Cannot delete the file.")
+
+        except Exception as e:
+            print("Error while deleting:", e)
+
+
+    # Create Journal File
+    def create_file(self):
+
+        try:
+            # 'x' mode = create a new file
+            with open(self.FILE_NAME, "x") as file:
+                file.write("")
+
+            print("Journal file created successfully!")
+
+        except FileExistsError:
+            print("Journal file already exists.")
+
+        except PermissionError:
+            print("Permission denied! Cannot create the file.")
+
+        except Exception as e:
+            print("Error while creating file:", e)
+
+
+    # Clear All Entries
+    def clear_entries(self):
+
+        try:
+
+            if not os.path.exists(self.FILE_NAME):
+                print("Journal file does not exist.")
+                return
+
+            confirmation = input("\nDo you want to clear all entries? (yes/no): ").strip().lower()
+
+            if confirmation == "yes":
+
+                with open(self.FILE_NAME, "w") as file:
+                    file.write("")
+
+                print("All journal entries cleared successfully!")
+
+            elif confirmation == "no":
+                print("Your journal entries are safe.")
+
+            else:
+                print("Please enter only 'yes' or 'no'.")
+
+        except FileNotFoundError:
+            print("Journal file not found.")
+
+        except PermissionError:
+            print("Permission denied! Cannot modify the file.")
+
+        except Exception as e:
+            print("Error while clearing entries:", e)
+
+
+# Main Menu
+
+my_journal = JournalManager()
+
 while True:
-    print("\n==== Welcome to Personal journal Manager ====\n")
-    print("\nSelecte One Option Fro Given Option\n")
-    print(" 1. Add a New Entry")
-    print(" 2. Viwe All Entery")
-    print(" 3. Search for an Entry")
-    print(" 4. Delete an Entry")
-    print(" 5 Exit")
 
-    choice=input("\nEnter your choice :")
+    print("\n===== Welcome to Personal Journal Manager =====")
+    print("1. Add a New Entry")
+    print("2. View All Entries")
+    print("3. Search for an Entry")
+    print("4. Delete All Entries")
+    print("5. Create Journal File")
+    print("6. Clear All Entries")
+    print("7. Exit")
+
+    choice = input("\nEnter your choice: ").strip()
 
 
     if choice == "1":
-        my_journal.add()
+        my_journal.add_entry()
 
     elif choice == "2":
-        my_journal.view()
+        my_journal.view_entries()
 
     elif choice == "3":
-        my_journal.Search()
+        my_journal.search_entry()
 
     elif choice == "4":
-        my_journal.delete()
+        my_journal.delete_entries()
 
     elif choice == "5":
-        print("Thank you for using our Personal Journal Programe")
+        my_journal.create_file()
+
+    elif choice == "6":
+        my_journal.clear_entries()
+
+    elif choice == "7":
+        print("Thank you for using Personal Journal Manager!")
         break
 
     else:
-        print("Invalid input\n")    
-            
-            
-
-
-            
-        
-
-            
+        print("Invalid input. Please select a valid option.")
